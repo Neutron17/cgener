@@ -15,7 +15,7 @@ CCFLAGS += -Wall
 
 LDFLAGS  = $(INCFLAGS)
 
-all: build
+all: build run
 
 run: build
 	$(BIN) $*

@@ -10,10 +10,17 @@
 
 int main(int argc, char *argv[]) {
 	struct Args args = parseArgs(argc, argv);
-	if(!isDir(args.dirName)) {
-		fprintf(stderr, "Was not a directory\n");
+	if(((args.sets & 0b1) != 0b1) || ((args.sets & 0b100) != 0b100) || ((args.sets & 0b10) != 0b10))
+		return 1;
+	int ret = mkdir(args.dirName, S_IRWXU);
+	if(ret == -1 && errno != EEXIST) {
+		fprintf(stderr, "Error in creating directory: %s, %s\n", args.dirName, strerror(errno));
 		return 1;
 	}
+	/*if(!isDir(args.dirName)) {
+		fprintf(stderr, "Was not a directory\n");
+		return 1;
+	}*/
 	char tmpdirName[24];
 	strncpy(tmpdirName, args.dirName, 16);
 	char str[420];
@@ -32,43 +39,22 @@ int main(int argc, char *argv[]) {
 		return 2;
 	}
 	fprintf(file, "%420s", str);
-	int ret = mkdir(strcat(tmpdirName, "/build/"), S_IRWXU);
+	ret = mkdir(strcat(tmpdirName, "/build/"), S_IRWXU);
 	if (ret == -1) {
-		switch (errno) {
-			case EACCES :
-				fprintf(stderr, "the parent directory does not allow write\n");
-				exit(EXIT_FAILURE);
-			case EEXIST:
-				fprintf(stderr, "pathname: %s already exists\n", tmpdirName);
-				break;
-			case ENAMETOOLONG:
-				fprintf(stderr, "pathname: %s is too long\n", tmpdirName);
-				exit(EXIT_FAILURE);
-			default:
-				perror("mkdir");
-				exit(EXIT_FAILURE);
-		}
+		fprintf(stderr, "Error in creating directory: %s, %s\n", tmpdirName, strerror(errno));
+		if(errno != EEXIST)
+			exit(EXIT_FAILURE);
 	}
 	strncpy(tmpdirName, args.dirName, 16);
 	ret = mkdir(strncat(tmpdirName, "/src/", 22), S_IRWXU);
 	if (ret == -1) {
-		switch (errno) {
-			case EACCES :
-				fprintf(stderr, "the parent directory does not allow write\n");
-				exit(EXIT_FAILURE);
-			case EEXIST:
-				fprintf(stderr, "pathname: %s already exists\n", tmpdirName);
-				break;
-			case ENAMETOOLONG:
-				fprintf(stderr, "pathname: %s is too long\n", tmpdirName);
-				exit(EXIT_FAILURE);
-			default:
-				perror("mkdir");
-				exit(EXIT_FAILURE);
-		}
+		fprintf(stderr, "Error in creating directory: %s, %s\n", tmpdirName, strerror(errno));
+		if(errno != EEXIST)
+			exit(EXIT_FAILURE);
 	}
 	strncpy(tmpdirName, args.dirName, 16);
+
 	fclose(file);
-	return 0;
+	return EXIT_SUCCESS;
 }
 
