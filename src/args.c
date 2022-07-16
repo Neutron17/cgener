@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <getopt.h>
 #include <stdlib.h>
+#include <string.h>
 #include "template.h"
 #include "common.h"
 
@@ -41,11 +42,37 @@ struct Args parseArgs(int argc, char *argv[]) {
 					optarg, 16);
 				sets |= 0b10;
 				break;
-			case 't':
-				loadTemplate(optarg);
+			case 't': {
+				File tmp = loadTemplate(optarg);
+				printf("used: %d\n", tmp.children.used);
+				//while(tmp.children.array != NULL) {
+					for(int i = 0; i < tmp.children.used; i++) {
+						puts("Here");
+						if(((File*)tmp.children.array[i])->isFile) {
+							free(tmp.children.array[i]);
+						} else {
+							if(((File*)tmp.children.array[i])->children.array != NULL) {
+								for(int j = 0; j < ((File*)tmp.children.array[i])->children.used; j++) {
+									printf("%s\n", ((File *)(((File *)tmp.children.array[i])->children.array[j]))->name);
+									free((File *)(((File *)tmp.children.array[i])->children.array[j]));
+								}
+								array_destroy(&((File *)tmp.children.array[i])->children);
+							}
+						}
+					}
+				//}
+				ret.template = tmp;
 				sets |= 0b100;
 				break;
+			}
+			default:
+				fprintf(stderr, "Unknown argument: '%c' for program\n", optopt);
+				exit(1);
 		}
+	}
+	if((sets & 0b1) && ((sets & 0b10) != 0b10)) {
+		strncpy(ret.projName, ret.dirName, 16);
+		sets |= 0b10;
 	}
 	ret.sets = sets;
 	return ret;

@@ -5,12 +5,12 @@
 
 struct GenType {
 	char path[32];
-	Template type;
+	File type;
 	bool isValid;
 };
 
 struct Args {
-	Template type;
+	File template;
 	char dirName[32];
 	char projName[16];
 	unsigned char sets;

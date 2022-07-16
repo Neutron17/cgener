@@ -1,9 +1,9 @@
-TEMPLATE c
-	DIR build
+TEMPLATE "c"
+	DIR "build"
 	DEND
 
-	DIR src
-		FILE main.c
+	DIR "src"
+		FILE "main.c"
 /*
  * Created at #!#TIME#!#
 */
@@ -16,15 +16,14 @@ int main(int argc, const char *argv[]) {
 		FEND
 	DEND
 
-	FILE Makefile
+	FILE "Makefile"
 CC = clang
-
 PNAME = c
 
 SRC  = $(shell find src -name "*.c")
 OBJ  = $(SRC:.c=.o)
 BIN_DIR = build
-BIN = $(BIN_DIR)/ #!#PNAME#!#
+BIN = $(BIN_DIR)/#!#PNAME#!#
 
 INCFLAGS  = -Isrc/
 
@@ -37,16 +36,15 @@ LDFLAGS  = $(INCFLAGS)
 all: build
 
 run: build
-        $(BIN) $*
+	$(BIN) $*
 
 build: $(OBJ)
-        $(CC) $(CCFLAGS) -ggdb -o $(BIN) $(filter %.o,$^) $(LDFLAGS)
+	$(CC) $(CCFLAGS) -ggdb -o $(BIN) $(filter %.o,$^) $(LDFLAGS)
 
 clean:
-        rm $(BIN_DIR)/* $(OBJ)
+	rm $(BIN_DIR)/* $(OBJ)
 
 %.o: %.c
-        $(CC) -ggdb -o $@ -c $< $(CCFLAGS)
-
+	$(CC) -ggdb -o $@ -c $< $(CCFLAGS)
 	FEND
 TEND

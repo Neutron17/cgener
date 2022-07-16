@@ -18,5 +18,6 @@ void array_destroy(Array *l);
 bool array_is_in(Array l, const void *n);
 void array_pop(Array *l);
 void array_pops(Array *l, unsigned n);
+void *array_last(Array l);
 
 #endif //_NTR_LIST_H_

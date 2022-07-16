@@ -53,3 +53,6 @@ void array_pops(Array *l, unsigned n) {
 		array_pop(l);
 }
 
+void *array_last(Array l) {
+	return l.array[l.used-1];
+}

@@ -7,6 +7,7 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <errno.h>
+#include "common.h"
 
 int main(int argc, char *argv[]) {
 	struct Args args = parseArgs(argc, argv);
@@ -21,9 +22,10 @@ int main(int argc, char *argv[]) {
 		fprintf(stderr, "Was not a directory\n");
 		return 1;
 	}*/
-	char tmpdirName[24];
-	strncpy(tmpdirName, args.dirName, 16);
-	char str[420];
+	memdeb_print();
+	/*char tmpdirName[24];
+	strncpy(tmpdirName, args.dirName, 16);*/
+	/*char str[420];
 	{
 		char before[420];
 		strncpy(str, MakefileDef, 420);
@@ -31,14 +33,17 @@ int main(int argc, char *argv[]) {
 		strncpy(before, str, strlen(str) - strlen(after));
 		before[strlen(str) - strlen(after)] = '\0';
 		sprintf(str, "%s%s", before, after);
-	}
-	FILE *file = fopen(strncat(tmpdirName,"/Makefile", 24), "w");
+	}*/
+	/*FILE *file = fopen(strncat(tmpdirName,"/Makefile", 24), "w");
+	memdeb_add_m(file, "Main file");
 	strncpy(tmpdirName, args.dirName, 16);
 	if(!file) {
 		fprintf(stderr, "Couldn't open Makefile\n");
 		return 2;
-	}
-	fprintf(file, "%420s", str);
+	}*/
+	//fprintf(file, "%420s", str);
+	/*fclose(file);
+	memdeb_mark_freed(file);
 	ret = mkdir(strcat(tmpdirName, "/build/"), S_IRWXU);
 	if (ret == -1) {
 		fprintf(stderr, "Error in creating directory: %s, %s\n", tmpdirName, strerror(errno));
@@ -52,9 +57,9 @@ int main(int argc, char *argv[]) {
 		if(errno != EEXIST)
 			exit(EXIT_FAILURE);
 	}
-	strncpy(tmpdirName, args.dirName, 16);
-
-	fclose(file);
+	strncpy(tmpdirName, args.dirName, 16);*/
+	//memdeb_print();
+	memdeb_destroy();
 	return EXIT_SUCCESS;
 }
 
