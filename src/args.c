@@ -11,7 +11,7 @@ struct Args parseArgs(int argc, char *argv[]) {
 	int c;
 	// Bits: 1st - dir, 2nd - projName, 3rd - type  
 	unsigned char sets = 0;
-	while((c = getopt(argc, argv, "vVdho:n:p:t:")) != -1){
+	while((c = getopt(argc, argv, "vVdho:n:p:t:u:")) != -1){
 		switch(c) {
 			case 'h':
 				printf(
@@ -63,8 +63,10 @@ struct Args parseArgs(int argc, char *argv[]) {
 				//}
 				ret.template = tmp;
 				sets |= 0b100;
-				break;
-			}
+			} break;
+			case 'u': {
+				strncpy(ret.uname, optarg, 16);
+			} break;
 			default:
 				fprintf(stderr, "Unknown argument: '%c' for program\n", optopt);
 				exit(1);

@@ -13,6 +13,7 @@ struct Args {
 	File template;
 	char dirName[32];
 	char projName[16];
+	char uname[16];
 	unsigned char sets;
 	bool isDebug;
 };

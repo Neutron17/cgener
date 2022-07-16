@@ -11,8 +11,10 @@
 
 int main(int argc, char *argv[]) {
 	struct Args args = parseArgs(argc, argv);
-	if(((args.sets & 0b1) != 0b1) || ((args.sets & 0b100) != 0b100) || ((args.sets & 0b10) != 0b10))
+	if(((args.sets & 0b1) != 0b1) || ((args.sets & 0b100) != 0b100) || ((args.sets & 0b10) != 0b10)) {
+		fprintf(stderr, "Not enough arguments\n");
 		return 1;
+	}
 	int ret = mkdir(args.dirName, S_IRWXU);
 	if(ret == -1 && errno != EEXIST) {
 		fprintf(stderr, "Error in creating directory: %s, %s\n", args.dirName, strerror(errno));
